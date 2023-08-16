@@ -87,3 +87,34 @@ SELECT species, AVG(escape_attempts) AS avg_attempts
 FROM animals
 WHERE date_of_birth BETWEEN '1990-01-01' AND '2000-12-31'
 GROUP BY species;
+
+
+/*This code will select all columns from the animals table where the owner_id matches the id of the owner with the full name of 'Melody Pond'. This will give you a list of all animals that belong to Melody Pond.*/
+SELECT animals.*
+FROM animals
+JOIN owners ON animals.owner_id = owners.id
+WHERE owners.full_name = 'Melody Pond';
+
+/*This code will select all columns from the animals table where the species_id matches the id of the species with the name 'Pokemon'. This will give you a list of all animals that are Pokemon.*/
+SELECT animals.*
+FROM animals
+JOIN species ON animals.species_id = species.id
+WHERE species.name = 'Pokemon';
+
+/*This code will select all columns from the owners table and all columns from the animals table, and it will join them based on the owner_id and id columns, respectively. The LEFT JOIN will ensure that all owners are included in the result set, even if they don't own any animals. The result set will be ordered by the full name of the owners.*/
+SELECT owners.full_name, animals.*
+FROM owners
+LEFT JOIN animals ON owners.id = animals.owner_id
+ORDER BY owners.full_name;
+
+/*This code will select the name of each species and the count of animals that belong to that species. The JOIN between the species and animals tables is based on the id and species_id columns, respectively. The GROUP BY clause groups the result set by the name of the species, and the COUNT function counts the number of animals in each group.*/
+SELECT species.name, COUNT(animals.id) AS num_animals FROM species JOIN animals ON species.id = animals.species_id GROUP BY species.name;
+
+/*This code will select all columns from the animals table where the species_id matches the id of the species with the name 'Digimon' and the owner_id matches the id of the owner with the full name 'Jennifer Orwell'. This will give you a list of all Digimon owned by Jennifer Orwell.*/
+SELECT animals.* FROM animals JOIN species ON animals.species_id = species.id JOIN owners ON animals.owner_id = owners.id WHERE species.name = 'Digimon' AND owners.full_name = 'Jennifer Orwell';
+
+/*This code will select all columns from the animals table where the owner_id matches the id of the owner with the full name 'Dean Winchester' and the tried_to_escape column is false. This will give you a list of all animals owned by Dean Winchester that haven't tried to escape.*/
+SELECT animals.* FROM animals JOIN owners ON animals.owner_id = owners.id WHERE owners.full_name = 'Dean Winchester' AND animals.escape_attempts = 0;
+
+/*This code will select the full name of each owner and the count of animals that belong to that owner. The JOIN between the owners and animals tables is based on the id and owner_id columns, respectively. The GROUP BY clause groups the result set by the full name of the owners, and the COUNT function counts the number of animals in each group. The ORDER BY clause orders the result set by the count of animals in descending order, so the owner with the most animals will be listed first. Finally, the LIMIT 1 clause limits the result set to only one row, which will be the owner with the most animals.*/
+SELECT owners.full_name, COUNT(animals.id) AS num_animals FROM owners JOIN animals ON owners.id = animals.owner_id GROUP BY owners.full_name ORDER BY num_animals DESC LIMIT 1;
