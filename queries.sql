@@ -118,3 +118,67 @@ SELECT animals.* FROM animals JOIN owners ON animals.owner_id = owners.id WHERE 
 
 /*This code will select the full name of each owner and the count of animals that belong to that owner. The JOIN between the owners and animals tables is based on the id and owner_id columns, respectively. The GROUP BY clause groups the result set by the full name of the owners, and the COUNT function counts the number of animals in each group. The ORDER BY clause orders the result set by the count of animals in descending order, so the owner with the most animals will be listed first. Finally, the LIMIT 1 clause limits the result set to only one row, which will be the owner with the most animals.*/
 SELECT owners.full_name, COUNT(animals.id) AS num_animals FROM owners JOIN animals ON owners.id = animals.owner_id GROUP BY owners.full_name ORDER BY num_animals DESC LIMIT 1;
+
+/*This query joins the visits, animals, and vets tables together and filters for visits made by William Tatcher using a WHERE clause. The results are then sorted by visit date in descending order and limited to the first row, which represents the most recent visit. Finally, the animal's name is selected from the animals table in the result set.*/
+SELECT animals.name
+FROM visits
+JOIN animals ON visits.animal_id = animals.id
+JOIN vets ON visits.vet_id = vets.id
+WHERE vets.name = 'William Tatcher'
+ORDER BY visits.visit_date DESC
+LIMIT 1;
+
+/*This query uses a subquery to find the ID of Stephanie Mendez in the vets table, and then counts the number of distinct animal_id values in the visits table where the vet_id matches Stephanie Mendez's ID. The result is a single value representing the count of different animals seen by Stephanie Mendez.*/
+SELECT COUNT(DISTINCT animal_id)
+FROM visits
+WHERE vet_id = (SELECT id FROM vets WHERE name = 'Stephanie Mendez');
+
+/*This query uses a LEFT JOIN to join the vets table with the vet_specialties table on the id column. It then uses another LEFT JOIN to join the vet_specialties table with the specialties table on the specialty_id column. This ensures that all rows from the vets table are included in the result set, even if there is no matching row in the vet_specialties or specialties tables.*/
+SELECT vt.name AS vet_name , s.name AS speciality FROM vets vt LEFT JOIN specializations sp ON vt.id = sp.vet_id
+LEFT JOIN species s ON sp.species_id = s.id ORDER BY vt.name;
+
+/*This query joins the visits, animals, and vets tables together and filters for visits made by Stephanie Mendez between April 1st and August 30th, 2020 using a WHERE clause that checks the name column in the vets table and the visit_date column in the visits table. The results are then filtered to include only the animal names from the animals table in the result set.*/
+SELECT animals.name
+FROM visits
+JOIN animals ON visits.animal_id = animals.id
+JOIN vets ON visits.vet_id = vets.id
+WHERE vets.name = 'Stephanie Mendez'
+AND visits.visit_date BETWEEN '2020-04-01' AND '2020-08-30';
+
+/*This query joins the visits and animals tables together on the id column and groups the results by animals.name. It then uses the COUNT function to count the number of visits for each animal and orders the results in descending order based on the number of visits. Finally, the LIMIT clause limits the result set to the first row, which represents the animal with the most visits.*/
+SELECT animals.name, COUNT(*) AS num_visits
+FROM visits
+JOIN animals ON visits.animal_id = animals.id
+GROUP BY animals.name
+ORDER BY num_visits DESC
+LIMIT 1;
+
+/*This query joins the visits, animals, and vets tables together and filters for visits made by Maisy Smith using a WHERE clause that checks the name column in the vets table. The results are then sorted by visit date in ascending order and limited to the first row, which represents the earliest visit. Finally, the animal's name is selected from the animals table in the result set.*/
+SELECT animals.name
+FROM visits
+JOIN animals ON visits.animal_id = animals.id
+JOIN vets ON visits.vet_id = vets.id
+WHERE vets.name = 'Maisy Smith'
+ORDER BY visits.visit_date ASC
+LIMIT 1;
+
+/*This query joins the visits, animals, and vets tables together and sorts the results by visit date in descending order. The LIMIT clause limits the result set to the first row, which represents the most recent visit.*/
+SELECT animals.*, vets.*, visits.visit_date
+FROM visits
+JOIN animals ON visits.animal_id = animals.id
+JOIN vets ON visits.vet_id = vets.id
+ORDER BY visits.visit_date DESC
+LIMIT 1;
+
+SELECT COUNT(*) FROM visits v JOIN animals a ON v.animal_id = a.id JOIN vets vt ON v.vet_id = vt.id LEFT JOIN specializations sp ON vt.id = sp.vet_id AND a.species_id = sp.species_id WHERE sp.vet_id IS NULL;
+
+/*This query joins the species, animals, visits, and vets tables together and filters for visits made by Maisy Smith using a WHERE clause that checks the name column in the vets table. The results are then grouped by species and sorted in descending order based on the number of visits for each species. The LIMIT clause limits the result set to the first row, which represents the species with the highest visit count.*/
+SELECT s.name AS Maisy_speciality
+FROM species s
+JOIN animals a ON s.id = a.species_id
+JOIN visits v ON a.id = v.animal_id
+JOIN vets vt ON v.vet_id = vt.id
+WHERE vt.name = 'Maisy Smith'
+GROUP BY s.name
+ORDER BY COUNT(v.visit_date) DESC
+LIMIT 1;
