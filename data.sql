@@ -139,3 +139,7 @@ INSERT INTO visits (vet_id, animal_id, visit_date) SELECT v.id , a.id , '2020-08
 INSERT INTO visits (vet_id, animal_id, visit_date) SELECT v.id , a.id , '2020-05-24' FROM vets v, animals a WHERE v.name = 'Stephanie Mendez' AND a.name = 'Blossom';
 
 INSERT INTO visits (vet_id, animal_id, visit_date) SELECT v.id , a.id , '2021-01-11' FROM vets v, animals a WHERE v.name = 'William Tatcher' AND a.name = 'Blossom';
+
+-- Database Performance Audit
+
+
