@@ -31,6 +31,8 @@ After you're finished please remove all the comments and instructions!
 
   <h3><b>Vet Clinic</b></h3>
 
+  ![Diagram of Vet Clinic](ERD.png)
+
 </div>
 
 <!-- TABLE OF CONTENTS -->
